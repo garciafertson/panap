@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 ################################################
-#
-#
-#
+#panapp bin, read in parameters using argparse
+#subparser 1 PANBGC
+#subparser 2 BUILD_CLIQUES
 ################################################
 __author__= "Fernando Garcia Guevara"
 __credits__= "Fernando Garcia Guevara"

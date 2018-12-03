@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 import subprocess
 import os, sys
-from pyproj_panBGC.gbk2aaBiosynth_allBGC import gb2fa_bgcbio
-from pyproj_panBGC.runcdhit import cdhit_hierarquical
-from pyproj_panBGC.createtsv_all_cdhitclst import create_clique_list
-from pyproj_panBGC.run_multigenblast import run_multigenblast
-from pyproj_panBGC.bgc_clique import retrieve_clique
-from pyproj_panBGC.run_pangenome_analysis import run_gethomologues, run_metapgn
+from panapp.gbk2faaBiosynth_allBGC import gb2fa_bgcbio
+from panapp.runcdhit import cdhit_hierarquical
+from panapp.createtsv_all_cdhitclst import create_clique_list
+from panapp.run_multigenblast import run_multigenblast
+from panapp.bgc_clique import retrieve_clique
+from panapp.run_pangenome_analysis import run_gethomologues, run_metapgn
 
 class Run:
     def __init__(self, args):
@@ -21,8 +21,10 @@ class Run:
         if metapgn: #if parameter metapgn is true run program metapgn for each cdhit-clique
             run_metapgn
 
-    def build_clique(self):
+    def build_clique(self,args):
+        self.args=args
         bgc_folder=self.args.folder
+        subprocess.call(["makekdb","build_clique_mgf",bgc_folder])
         gb2fa_bgcbio(bgc_folder) #extract BGC biosynthetic genes and create a multifasta
         cdhit_hierarquical(multifasta)# run hierarquical cdhit (%id 100,95,90,80,70,45) on multifasta 
         create_clique_list(clstr_file_list)# create a tsv with cliques formed from cdhit clusters for each %id level(cdhit-cliques)

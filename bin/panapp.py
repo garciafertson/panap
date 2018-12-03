@@ -22,7 +22,7 @@ import panapp
 from panapp.run import Run
 
 def print_header():
-    print """ BGCreads """
+    print """ PANAP """
 def phelp():
     print"""
                     panapp
@@ -34,7 +34,11 @@ def phelp():
 
     for more information type:
     
-    panapp.py bgc_gbk -h
+    panapp.py panbgc -h
+
+    or
+    
+    panap.py build_clique -h
 
     """
 
@@ -42,7 +46,7 @@ def phelp():
 
 if __name__ == '__main__':
     parser= argparse.ArgumentParser()
-    parser.add_argument('--version', action='version', version='BGCreads v%s' % BGCreads.__version__)
+    parser.add_argument('--version', action='version', version='panapp v%s' % panapp.__version__)
     subparser= parser.add_subparsers(help="sub-comand help: find, database", dest='subparser_name')
 
     ######## PARSER 1 pangbc_parser
@@ -78,41 +82,38 @@ if __name__ == '__main__':
     run_pangenome_options = panbgc_parser.add_argument_group('pangenome running option')
     run_pangenome_options.add_argument("--get_homologues",
                                 metavar='get_homologues',
-                                help="run pangenome analysis using get_homologues program,\n
-                                modify gethmlges.txt to change get_homologues running parameters",
+                                help="run pangenome analysis using get_homologues program, modify gethmlges.txt to change get_homologues running parameters",
                                 default=True,
                                 type= bool)
     run_pangenome_options.add_argument("--metapgn",
-                                metavar='metapgn',
-                                help="run MetaPGN program for pangenome analysis \n
-                                the output of the program requires further processin for graph visualization",
-                                default=False
+                                metavar="metapgn",
+                                help="run MetaPGN program for pangenome analysis the output of the program requires further processing for graph visualization",
+                                default=False,
                                 type=bool)
 
     ######### PARSER 2 build_cliques 
     build_cliques_parser= subparser.add_parser('build_clique',
-                                               description="reads the BGC.gbk in a folder and for each file retrive a list\n
-                                               of other BGC.gbk sharing biosynthetic genes at different identity thresholds",
-                                               help="specify a folder containing a BGC.gbk database and group them based on\n
-                                               their biosiynthethic genes",
+                                               description="reads the BGC.gbk in a folder and for each file retrive a list of other BGC.gbk sharing biosynthetic genes at different identity thresholds",
+                                               help="specify a folder containing a BGC.gbk database and group them based on their biosiynthethic genes",
                                                epilog='''
                                                build_cliques reads a set of GBK files, extract their biosinthetic genes\n
                                                uses cd-hit to construct gene clusters at different % identity levels \n
                                                and then uses the cluster information from cd-hit to group the BGC.gbk files \n
                                                the final output is a tsv file with two columns, the first colum contains the\n
                                                names of each BGC.gbk in the initial set, and the second column contains a list\n
-                                               of the BGC sharing at least one biosynthetic gene at the specified identity cutoff'''
-    input_database = build_cliques_paser.add_argument_group('input database')
+                                               of the BGC sharing at least one biosynthetic gene at the specified identity cutoff''')
+    input_database = build_cliques_parser.add_argument_group('input database')
     input_database.add_argument('--folder',
                                 metavar='folder',
                                 help="Path to folder containig the BGC.gbk file database",
+                                type=str,
                                 required=True)
-    input_database.add_argument('--identity_cutoff',
-                                 metavar="identity_cutoff",
-                                 help="mimimum idetity cutoff for cd-hit gene clustering, set value between \n
-                                 45  and 100 (default 45) ",
-                                 type=float,
-                                 default=45)
+#    input_database.add_argument('--identity_cutoff',
+#                                 metavar="identity_cutoff",
+#                                 help="mimimum idetity cutoff for cd-hit gene clustering, set value between \n
+#                                 45  and 100 (default 45) ",
+#                                 type=float,
+#                                 default=45)
     #check whether --help is needed
     if (len(sys.argv)==1 or sys.argv[1]== '-h' or sys.argv[1]== '--help'):
         phelp()

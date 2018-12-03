@@ -13,12 +13,10 @@ def check_database_exists(self, database):
         print("one database exists  %s" %db_file)
         return(True, db_file[0])
     elif len(db_file)==0: # print message to sdtrd error
-        print("couldn't find database for Multigeneblast, please
-                create one and move it into %s folder" %database)
+        print("couldn't find database for Multigeneblast, please create one and move it into %s folder" %database)
         return(False)
     else:
-        print("more than two database files in folder %s, please
-                leave only one" %folder)
+        print("more than two database files in folder %s, please leave only one" %folder)
 
 
 def run_multigenblast(self, query, database):

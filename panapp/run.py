@@ -28,9 +28,9 @@ class Run:
         db_name=tmp_name.split("/")[-1] #split folder by "/" character
         cmd=['makedb',db_name,tmp_name]
         subprocess.call(cmd)
-        multifasta=gb2fa_bgcbio(bgc_folder) #extract BGC biosynthetic genes and create a multifasta
-        cdhit_hierarquical(multifasta)# run hierarquical cdhit (%id 100,95,90,80,70,45) on multifasta 
-        create_clique_list()# create a tsv with cliques formed from cdhit clusters for each %id level(cdhit-cliques)
+        multifasta=gb2fa_bgcbio(bgc_folder,db_name) #extract BGC biosynthetic genes and create a multifasta
+        cdhit_hierarquical(multifasta,db_name)# run hierarquical cdhit (%id 100,95,90,80,70,45) on multifasta 
+        create_clique_list(db_name)# create a tsv with cliques formed from cdhit clusters for each %id level(cdhit-cliques)
 
     def main(self):
         if self.args.subparser_name=='panbgc':

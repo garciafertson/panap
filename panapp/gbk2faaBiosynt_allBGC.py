@@ -53,21 +53,21 @@ keys() ) :
 #parser = ArgumentParser(description="path to folder containing BGC gbk files")
 #parser.add_argument("input", type=str, help="path to folder with gbk files")
 #args=parser.parse_args()
-def gb2fa_bgcbio(path_folder):
+def gb2fa_bgcbio(path_folder, db_name):
     file_names=[]
 #create list of files with .gbk extension within folder
     for name in os.listdir(path_folder) :
         if name.endswith(".gbk") :
             file_names.append(name)
 
-    output_handle = open("panap_biosynth.faa", "w")
+    output_handle = open(db_name+"_biosynth.faa", "w")
 
     for name in file_names :
         filename= path_folder + "/" + name
         gbk2faaBiosynth(filename, output_handle)
 
     output_handle.close()
-    return("panap_biosynth.faa")
+    return(db_name+"_biosynth.faa")
 
 
 

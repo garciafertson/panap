@@ -60,8 +60,8 @@ class bgc_clstr(object):
 #leer .clstr file cdhit
 #cada cluster comienza con >
 #guarda la informacion del archivo en un hash/dictionary
-def create_clique_list():
-    prefix="panap_"
+def create_clique_list(db_name):
+    prefix= db_name+"_"
     for mid in ['100','-95','-90','-80','-70','-60','-45']:
         prefix=prefix+mid
         in_file=prefix+'.clstr'

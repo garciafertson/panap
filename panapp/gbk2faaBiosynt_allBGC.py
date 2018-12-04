@@ -63,10 +63,11 @@ def gb2fa_bgcbio(path_folder):
     output_handle = open("panap_biosynth.faa", "w")
 
     for name in file_names :
-        filename= path_folder + name
+        filename= path_folder + "/" + name
         gbk2faaBiosynth(filename, output_handle)
 
     output_handle.close()
+    return("panap_biosynth.faa")
 
 
 

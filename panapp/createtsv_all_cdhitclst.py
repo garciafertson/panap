@@ -61,10 +61,10 @@ class bgc_clstr(object):
 #cada cluster comienza con >
 #guarda la informacion del archivo en un hash/dictionary
 def create_clique_list():
-    outfile=panap_
-    for mid in ['-100','-95','-90','-80','-70','60','-45']:
-        out_name=outfile+mid
-        in_file=out_name+'.clstr'
+    prefix="panap_"
+    for mid in ['100','-95','-90','-80','-70','-60','-45']:
+        prefix=prefix+mid
+        in_file=prefix+'.clstr'
         clustr={} #store gene clusters from cdhit files
         cdhit_clusters= open(in_file, "r" )
         for line in cdhit_clusters:
@@ -100,9 +100,9 @@ def create_clique_list():
                 bgcs[ [key].reprsnt].add_files( [key].file_list)
 
         #save in file all BGC in file and their representative BGC
-        outfile=out_name + "_allBGC.tsv"
+        outfile=prefix + "_allBGC.tsv"
         output= open(outfile, "w")
-        print len(bgc30k.keys())
+        #print len(bgc30k.keys())
         for key in bgc30k.keys():
             output.write("%s\t" %key)
             for rep in bgc30k[key].representative_list:
@@ -111,7 +111,7 @@ def create_clique_list():
         output.close()
 
         #save in file the representative BGCs and the BGC they represent
-        outfile=out_name + "_rep_BGC.tsv"
+        outfile=prefix + "_rep_BGC.tsv"
         output= open(outfile, "w")
         for key in bgcs.keys():
             n= len(bgcs[key].file_list)
@@ -122,7 +122,7 @@ def create_clique_list():
         output.close()
 
         #save in file all BGC and a list of BGC represented by their representatives
-        outfile=out_name + "_clique.tsv"
+        outfile=prefix + "_clique.tsv"
         output= open(outfile, "w")
         for key in bgc30k.keys():
             bgc_clique=[]

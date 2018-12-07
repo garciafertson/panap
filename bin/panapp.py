@@ -65,7 +65,7 @@ if __name__ == '__main__':
     input_options = panbgc_parser.add_argument_group('input options')
     input_options.add_argument('--gbk',
                                metavar='gbk',
-                               help="Path BGG.gbk input file",
+                               help="Path BGG.gbk input file, (for now input should also be included in database)",
                                required=True)
     input_options.add_argument('--min_id',
                                 metavar='min_id',
@@ -77,43 +77,40 @@ if __name__ == '__main__':
     database_options.add_argument('--database_folder',
                                 metavar='database_folder',
                                 help="Path to folder containig the GBK database for cluster blast",
-                                default= './Database_BGC_all')
+                                required=True)
 
     run_pangenome_options = panbgc_parser.add_argument_group('pangenome running option')
+    
+    run_pangenome_options.add_argument("--multigeneblast",
+                                help="run multigeneblast using BGC database",
+                                action="store_true")
+
     run_pangenome_options.add_argument("--get_homologues",
-                                metavar='get_homologues',
                                 help="run pangenome analysis using get_homologues program, modify gethmlges.txt to change get_homologues running parameters",
-                                default=True,
-                                type= bool)
+                                action='store_true')
     run_pangenome_options.add_argument("--metapgn",
-                                metavar="metapgn",
                                 help="run MetaPGN program for pangenome analysis the output of the program requires further processing for graph visualization",
-                                default=False,
-                                type=bool)
+                                action='store_true')
 
     ######### PARSER 2 build_cliques 
     build_cliques_parser= subparser.add_parser('build_clique',
                                                description="reads the BGC.gbk in a folder and for each file retrive a list of other BGC.gbk sharing biosynthetic genes at different identity thresholds",
                                                help="specify a folder containing a BGC.gbk database and group them based on their biosiynthethic genes",
                                                epilog='''
-                                               build_cliques reads a set of GBK files, extract their biosinthetic genes\n
-                                               uses cd-hit to construct gene clusters at different % identity levels \n
-                                               and then uses the cluster information from cd-hit to group the BGC.gbk files \n
-                                               the final output is a tsv file with two columns, the first colum contains the\n
-                                               names of each BGC.gbk in the initial set, and the second column contains a list\n
-                                               of the BGC sharing at least one biosynthetic gene at the specified identity cutoff''')
+                                               build_clique revieve a folder with BGC.gbk files, extract their biosinthetic genes\n
+                                               uses cd-hit to construct gene clusters at different % identity levels 100,95,90,80,70,60,45 \n
+                                               and then uses the .clstr information from cd-hit to group the BGC.gbk files.
+                                               There are three sets of output files with the information nedded for the next stage\n
+                                               allBGC.tsv: the representative BGC filenames for each file in folder\n
+                                               repBGC.tsv: the the represented BGC.gbk files by each representative BGC\n
+                                               BGC_clique.tsv: the set of connected BGC by at least one gene for each file in folder''')
     input_database = build_cliques_parser.add_argument_group('input database')
     input_database.add_argument('--folder',
                                 metavar='folder',
                                 help="Path to folder containig the BGC.gbk file database",
                                 type=str,
                                 required=True)
-#    input_database.add_argument('--identity_cutoff',
-#                                 metavar="identity_cutoff",
-#                                 help="mimimum idetity cutoff for cd-hit gene clustering, set value between \n
-#                                 45  and 100 (default 45) ",
-#                                 type=float,
-#                                 default=45)
+    
     #check whether --help is needed
     if (len(sys.argv)==1 or sys.argv[1]== '-h' or sys.argv[1]== '--help'):
         phelp()

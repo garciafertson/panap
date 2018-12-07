@@ -1,42 +1,36 @@
-#! /usr/bin/env python2.7
+'''The next modules recieve the BGC.gbk to search cliques in the BGCcliques.tsv files
+at different cutoff %identity values, recieve a GBK filename present in the GBK folder database
+and a cutoff value, and return cliques for files above minimum identity cutoff
+return a dictionary with the list of cliques at different identity cutoff
+'''
 
-import os
-import re
+import os, re, sys
 
-def search_clique(self,gbk,database,cutoff):
-    name=database+str(cutoff)+".tsv"
+def search_clique(gbk,filename):
     input_handle=open(filename, "r")
-    for line in input_hande:
+    for line in input_handle:
+        line=line.rstrip()
         name=line.split("\t")[0]
-        array=line.split("\t")[1]
-        array=line.split("; ")#check tsv separation of clique
+        array=line.split("\t")[2:]
         if gbk in name:
             return (array)
 
-def parse_multigeneblast(self,gbk):
-    input_handle=open("mgboutput.txt", "r")
-    #parse content of the text file from Multigenblast run
-    #if exist retrieve the name of the gbk with the highest score
-    #display alignment stats of the best hit
-    for line in input_handle:
-        gbk
-        rexp=re.compile(".*gbk")
-        if re.match(rexp, line):
-        #save file if best hit
-            tmp=1##*complete code 
-    return(besthit)
-    print (blast_stats)
 
-def retrieve_clique(self,gbk,database,minlim):
-    gbk=parse_multigeneblast(gbk)
+def retrieve_clique(gbk,database,minlim):
     if minlim > 100 or minlim < 45:
         sys.exit("mimimun identity cutoff value for cliques out of range")
-    idctoff=[100,95,90,80,70,60,45]
-    clique_dict={}
-    for cutoff in idctoff:
+    path= "/".join(database.split("/")[:-1])
+    idctoff=[100, 95, 90, 80, 70, 60, 45]
+    prefix=database.split("/")[-1] #split folder by "/" character
+    mid= ['_100','-95','-90','-80','-70','-60','-45']
+    sufix="_clique.tsv"
+    cliques=[]
+    for i,cutoff in enumerate(idctoff):
+        prefix+=mid[i]
+        filename=path+"/"+prefix+sufix
         if cutoff >= minlim:
-           clique=search_clique(gbk, database, cutoff)
-           clique_dict[str(cutoff)]=clique
-    return(clique_dict)
+           clique=search_clique(gbk,filename)
+           cliques.append(clique)
+    return(cliques)
 
 

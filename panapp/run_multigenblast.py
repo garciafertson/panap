@@ -1,41 +1,44 @@
-#!/usr/local/python2.7
 
-import glob, sys
+import glob, sys, re
+import subprocess
 '''This module reads in a gbk file, search for a clusterblast database
-and performs cluster blast, then return the name of the closest hit if exists,
-(the list of the closests hits) and the name gbk file.'''
-def check_database_exists(self, database):
-    mgb_dbname=database+"*.gbldb" ##* check output filename of multigeneblast
-    db_file=[]
-    for file in glob.glob(mgb_dbname):
-        db_file.append(file)
-    if len(db_file==1):
-        print("one database exists  %s" %db_file)
-        return(True, db_file[0])
-    elif len(db_file)==0: # print message to sdtrd error
-        print("couldn't find database for Multigeneblast, please create one and move it into %s folder" %database)
+and performs MultigenBlast, and then, if exists, returns the name of the closest hit '''
+
+def check_database_exists(database):
+    dbname=database+".*" #check output filename of multigeneblast
+    if len(glob.glob(dbname))>=7:
+        print("database exists")
+        return(True)
+    else:
+        print("couldn't find database files for MultigeneBlast\n please create one using: panap build_clique --folder <path>" %folder)
         return(False)
-    else:
-        print("more than two database files in folder %s, please leave only one" %folder)
 
+def parse_MGBoutput(out_folder):
+    filename=out_folder+"/clusterblast_output.txt"
+    file_handle=open(filename, "r")
+    for line in file_handle:
+        if line.startswith("1. "):
+            break
+        else:
+            next
+    besthit=line.split(" ")[1]
+    besthit=besthit.split("\t")[0]
+    besthit=besthit[:-2]
+    return(besthit)
 
-def run_multigenblast(self, query, database):
+def run_multigenblast(query, database):
     #look for database for running multigeneblast
-    #ask the user to build one before running 
-    #and put it inside de gbk database folder
-    database_exists,db_file=check_database_exists(database)
+    database_exists=check_database_exists(database)
     if database_exists:
-        #subprocess.call(["cd", "$MULTIGENEBLAST"])
-        subprocess.call(["multigeneblast", "-in", query, "-db", db_file, "-out","tmp_multigenelbast_output", "--minpercid", "45" ])
-        #subprocess.call(["cd",])
+        db_name=query+database.split("/")[-1] #split folder by "/" character
+        out_folder=query.replace(".","_")+"_outMGB"
+        print(out_folder)
+        cmd=["multigeneblast", "-in", query, "-out", out_folder, "-db", database, "-minpercid", "45", "-from", "1", "-to", "10000" ]
+        subprocess.call(cmd)
+        besthit=parse_MGBoutput(out_folder)
+        return(besthit)
     else:
-        print ("error, multigeneblast databse doesn't exists, exit panap")
+        print ("error run_multigeneblast, sys.exit()")
         sys.exit()
-
-
-#'''this module build the required database for runing multigenblast 
-# using the bgk inside the specified folder'''
-
-# def build_multigenblast_db(self, database)
 
 

@@ -60,7 +60,8 @@ class bgc_clstr(object):
 #leer .clstr file cdhit
 #cada cluster comienza con >
 #guarda la informacion del archivo en un hash/dictionary
-def create_clique_list(db_name):
+def create_clique_list(bgc_folder, db_name):
+    path="/".join(bgc_folder.split("/")[:-1])
     prefix= db_name+"_"
     for mid in ['100','-95','-90','-80','-70','-60','-45']:
         prefix=prefix+mid
@@ -101,6 +102,7 @@ def create_clique_list(db_name):
 
         #save in file all BGC in file and their representative BGC
         outfile=prefix + "_allBGC.tsv"
+        outfile="/".join([path,outfile])
         output= open(outfile, "w")
         #print len(bgc30k.keys())
         for key in bgc30k.keys():
@@ -112,6 +114,7 @@ def create_clique_list(db_name):
 
         #save in file the representative BGCs and the BGC they represent
         outfile=prefix + "_rep_BGC.tsv"
+        outfile="/".join([path,outfile])
         output= open(outfile, "w")
         for key in bgcs.keys():
             n= len(bgcs[key].file_list)
@@ -123,6 +126,7 @@ def create_clique_list(db_name):
 
         #save in file all BGC and a list of BGC represented by their representatives
         outfile=prefix + "_clique.tsv"
+        outfile="/".join([path,outfile])
         output= open(outfile, "w")
         for key in bgc30k.keys():
             bgc_clique=[]

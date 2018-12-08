@@ -47,9 +47,7 @@ class bgc_clstr(object):
      # add a filename to the gruop if not peviously included
     def add_files(self,filename_list):
         for name in filename_list:
-            if name in self.file_list:
-                continue
-            else:
+            if name not in self.file_list:
                 self.file_list.append(name)        
 
 # read in script parameters
@@ -93,12 +91,12 @@ def create_clique_list(bgc_folder, db_name):
                     bgc30k[line].add_files(clustr[key].reprsnt)
             #this part for associate the representative gbk and the files they represent
             try:
-                bgcs[[key].reprsnt]
+                bgcs[clustr[key].reprsnt]
             except:
                 bgcs[clustr[key].reprsnt]=bgc_clstr(clustr[key].reprsnt, clustr[key].type)
                 bgcs[clustr[key].reprsnt].add_files(clustr[key].file_list)
             else:
-                bgcs[ [key].reprsnt].add_files( [key].file_list)
+                bgcs[clustr[key].reprsnt].add_files(clustr[key].file_list)
 
         #save in file all BGC in file and their representative BGC
         outfile=prefix + "_allBGC.tsv"
